@@ -1,13 +1,11 @@
 /****INIT SERVER****/
-const express = require("express");
-const app = express();
-const http = require("http");
-const server = http.createServer(app);
-const { Server } = require("socket.io");
-const io = new Server(server);
-server.listen(3000, () => {
-  console.log("listening on *:3000");
-});
+const PORT = process.env.PORT || 3000;
+const INDEX = "/index.html";
+
+const server = express()
+  .use((req, res) => res.sendFile(INDEX, { root: __dirname }))
+  .listen(PORT, () => console.log(`Listening on ${PORT}`));
+const io = socketIO(server);
 
 /****USER DATA STORAGE****/
 let users = {};
