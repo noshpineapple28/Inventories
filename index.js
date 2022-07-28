@@ -132,4 +132,5 @@ setInterval(() => {
   for (let player in users) {
     io.to(users[player].userID).emit("take inventory");
   }
+  console.log(1);
 }, 2000);
