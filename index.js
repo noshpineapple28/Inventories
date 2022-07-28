@@ -1,17 +1,17 @@
 // Setup basic express server
-const express = require('express');
+const express = require("express");
 const app = express();
-const http = require('http');
+const http = require("http");
 const server = http.createServer(app);
 const { Server } = require("socket.io");
 const io = new Server(server);
 
 server.listen(process.env.PORT || 3000, () => {
-  console.log('listening on *:3000');
+  console.log("listening on *:3000");
 });
 
-app.get('/', (req, res) => {
-  res.sendFile(__dirname + '/index.html');
+app.get("/", (req, res) => {
+  res.sendFile(__dirname + "/index.html");
 });
 
 /****USER DATA STORAGE****/
@@ -52,7 +52,9 @@ io.on("connection", (socket) => {
 
   //give inventory to DM
   socket.on("give inventory", (data) => {
-    io.to(dm.userID).emit("update inventories", [data, socket.username]);
+    if (dm != undefined) {
+      io.to(dm.userID).emit("update inventories", [data, socket.username]);
+    }
   });
 
   //remove an item from an inventory
@@ -67,7 +69,11 @@ io.on("connection", (socket) => {
 
   //handle share request, and send to the DM
   socket.on("share request", (data) => {
-    io.to(dm.userID).emit("share request", data);
+    if (dm != undefined) {
+      io.to(dm.userID).emit("share request", data);
+    } else {
+      io.to(socket.id).emit("deny share request");
+    }
   });
 
   //allow share request
@@ -103,9 +109,13 @@ io.on("connection", (socket) => {
         data.note.recipient != "DM" &&
         users[data.note.recipient].userID != dm.userID
       )
+      if (dm != undefined) {
         io.to(users["DM"].userID).emit("private message", data);
+      }
     } else {
-      io.to(users["DM"].userID).emit("private message", data);
+      if (dm != undefined) {
+        io.to(users["DM"].userID).emit("private message", data);
+      }
     }
   });
 
