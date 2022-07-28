@@ -1,5 +1,5 @@
 //connects to the server
-var socket = io("https://dnd-inventories.herokuapp.com/", {
+var socket = io("http://localhost:3000", {
   transports: ["websocket"],
 });
 var username;
