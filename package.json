@@ -1,7 +1,7 @@
 {
     "name": "server",
     "version": "1.0.0",
-    "description": "mapp allowing transfer and manipulation of items",
+    "description": "my first socket.io app",
     "dependencies": {
         "express": "^4.18.1",
         "socket.io": "^4.5.1"
