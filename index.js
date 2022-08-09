@@ -89,6 +89,7 @@ io.on("connection", (socket) => {
 
   //adds any notes made by DM to a player's notes
   socket.on("add note", (data) => {
+    console.log(users, data[0])
     io.to(users[data[0].currentOwner].userID).emit("add note", [
       data[0],
       data[1],
