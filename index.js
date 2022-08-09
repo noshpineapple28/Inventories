@@ -110,9 +110,7 @@ io.on("connection", (socket) => {
       if (
         data.note.senderID != dm.userID
       ) {
-        if (a) {
-          io.to(users["DM"].userID).emit("private message", data);
-        }
+        io.to(users["DM"].userID).emit("private message", data);
       }
     } else if (dm != undefined && dm != null) {
       io.to(users["DM"].userID).emit("private message", data);
