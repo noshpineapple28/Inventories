@@ -69,7 +69,7 @@ io.on("connection", (socket) => {
 
   //handle share request, and send to the DM
   socket.on("share request", (data) => {
-    if (dm != undefined) {
+    if (dm != undefined && dm != null) {
       io.to(dm.userID).emit("share request", data);
     } else {
       io.to(socket.id).emit("deny share request");
@@ -99,6 +99,7 @@ io.on("connection", (socket) => {
   socket.on("chat message", (data) => {
     socket.broadcast.emit("chat message", data);
   });
+
   //takes private messages
   socket.on("private message", (data) => {
     //fix bug with usernames
@@ -107,15 +108,15 @@ io.on("connection", (socket) => {
       io.to(users[data.note.recipient].userID).emit("private message", data);
       if (
         data.note.recipient != "DM" &&
-        users[data.note.recipient].userID != dm.userID
-      )
-      if (dm != undefined) {
-        io.to(users["DM"].userID).emit("private message", data);
+        users[data.note.recipient].senderID != dm.userID &&
+        dm != undefined
+      ) {
+        if (a) {
+          io.to(users["DM"].userID).emit("private message", data);
+        }
       }
-    } else {
-      if (dm != undefined) {
-        io.to(users["DM"].userID).emit("private message", data);
-      }
+    } else if (dm != undefined && dm != null) {
+      io.to(users["DM"].userID).emit("private message", data);
     }
   });
 
